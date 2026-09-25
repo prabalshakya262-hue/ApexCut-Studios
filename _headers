@@ -1,0 +1,24 @@
+# Cloudflare Pages Headers Configuration
+# https://developers.cloudflare.com/pages/platform/headers/
+
+# Security Headers for all pages
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Cache static assets (CSS, JS, Fonts)
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Executable Download Headers (.exe)
+# Ensures browsers trigger direct download with correct filename and MIME type
+/downloads/*
+  Content-Type: application/vnd.microsoft.portable-executable
+  Content-Disposition: attachment
+  Cache-Control: public, max-age=604800

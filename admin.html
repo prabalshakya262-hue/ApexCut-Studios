@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApexCut Studio - Co-Owner Control Panel</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="admin-brand">
+      <div class="brand-icon-box" style="width: 32px; height: 32px;">
+        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm2 2v3h2V6H6zm0 5v2h2v-2H6zm0 4v3h2v-3H6zm10-9v3h2V6h-2zm0 5v2h2v-2h-2zm0 4v3h2v-3h-2zm-6-6l5 3-5 3V8z"/></svg>
+      </div>
+      <span>ApexCut Studio</span>
+      <span class="admin-badge">CO-OWNER CONTROL PORTAL</span>
+    </div>
+
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        <span>View Live Site</span>
+      </a>
+      <button type="button" class="btn btn-secondary btn-sm" id="logoutBtn" style="display: none;">Logout</button>
+    </div>
+  </header>
+
+  <!-- PIN Protection Gate -->
+  <div id="authGate" class="auth-card">
+    <div class="auth-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+    <h2 style="font-size: 1.5rem; margin-bottom: 8px;">Owners Access</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted);">
+      Enter the access PIN to manage website settings, .exe downloads, and announcement banners.
+    </p>
+
+    <form id="pinForm">
+      <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="6" autofocus autocomplete="off">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <span style="font-size: 0.78rem; color: var(--text-dim);">Default PIN: <strong>1234</strong></span>
+        <span id="pinError" style="font-size: 0.8rem; color: var(--accent-rose); display: none;">Incorrect PIN!</span>
+      </div>
+      <button type="submit" class="btn btn-cyan btn-lg" style="width: 100%;">
+        Unlock Control Panel &rarr;
+      </button>
+    </form>
+  </div>
+
+  <!-- Main Admin Dashboard (Hidden until PIN verified) -->
+  <main id="adminDashboard" class="admin-container" style="display: none;">
+
+    <!-- Navigation Tabs -->
+    <nav class="admin-tabs" aria-label="Admin Navigation">
+      <button type="button" class="admin-tab active" data-tab="tab-exe">📦 App &amp; .EXE Attachment</button>
+      <button type="button" class="admin-tab" data-tab="tab-banner">📢 Banner &amp; Announcements</button>
+      <button type="button" class="admin-tab" data-tab="tab-specs">💻 System Specs</button>
+      <button type="button" class="admin-tab" data-tab="tab-team">👥 Co-Owners &amp; Team Notes</button>
+      <button type="button" class="admin-tab" data-tab="tab-security">🔒 Security &amp; PIN</button>
+    </nav>
+
+    <!-- Tab 1: App & .EXE Attachment -->
+    <section id="tab-exe" class="admin-tab-content">
+      <div class="admin-card">
+        <h3 class="admin-card-title">
+          <span>📦 Executable (.EXE) Attachment Manager</span>
+        </h3>
+        <p class="admin-card-desc">
+          Attach or update the video editor executable file downloaded by website visitors. You can drag and drop your new <code>.exe</code> below to automatically compute its file size and SHA-256 cryptographic hash!
+        </p>
+
+        <!-- Drag & Drop Zone for .exe -->
+        <div class="file-dropzone" id="exeDropzone">
+          <input type="file" id="exeFileInput" accept=".exe" style="display: none;">
+          <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <div class="dropzone-text">Drop your application .exe here, or <span style="color: var(--accent-cyan);">browse files</span></div>
+          <div class="dropzone-sub">Automatically reads file name, file size (MB), and computes true SHA-256 hash</div>
+        </div>
+
+        <div class="form-grid form-grid-2" style="margin-bottom: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="cfgFileName">Executable File Name</label>
+            <input type="text" id="cfgFileName" class="form-control" placeholder="ApexCut-Setup-v2.5.0.exe">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cfgVersion">Version Tag</label>
+            <input type="text" id="cfgVersion" class="form-control" placeholder="2.5.0">
+          </div>
+        </div>
+
+        <div class="form-grid form-grid-3" style="margin-bottom: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="cfgFileSize">Display File Size</label>
+            <input type="text" id="cfgFileSize" class="form-control" placeholder="85.4 MB">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cfgReleaseDate">Release Date</label>
+            <input type="text" id="cfgReleaseDate" class="form-control" placeholder="September 25, 2026">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cfgArchitecture">Target Architecture</label>
+            <input type="text" id="cfgArchitecture" class="form-control" placeholder="Windows 64-bit (x64)">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" for="cfgSha256">SHA-256 Checksum Hash</label>
+          <input type="text" id="cfgSha256" class="form-control" style="font-family: var(--font-mono); font-size: 0.8rem;" placeholder="ca6bfdb59a91683d4c4c7574e287a9c50158d849eff6d9d6663f322968b57066">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cfgDownloadPath">Relative Download Path (in website folder)</label>
+          <input type="text" id="cfgDownloadPath" class="form-control" placeholder="downloads/ApexCut-Setup-v2.5.0.exe">
+          <span style="font-size: 0.78rem; color: var(--text-dim); margin-top: 4px;">
+            Place the matching .exe in your website's <code>downloads/</code> folder so visitors can download it!
+          </span>
+        </div>
+      </div>
+
+      <!-- App Branding Card -->
+      <div class="admin-card">
+        <h3 class="admin-card-title">🎨 Software Branding &amp; Headlines</h3>
+        <div class="form-grid form-grid-2" style="margin-bottom: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="cfgBrandName">Software Name</label>
+            <input type="text" id="cfgBrandName" class="form-control" placeholder="ApexCut Studio">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cfgBrandBadge">Hero Badge Tag</label>
+            <input type="text" id="cfgBrandBadge" class="form-control" placeholder="v2.5.0 STABLE • 64-BIT WINDOWS">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" for="cfgBrandSubheadline">Hero Description Subtitle</label>
+          <textarea id="cfgBrandSubheadline" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cfgTotalDownloads">Simulated Total Downloads</label>
+          <input type="number" id="cfgTotalDownloads" class="form-control" placeholder="148920">
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: Announcements -->
+    <section id="tab-banner" class="admin-tab-content" style="display: none;">
+      <div class="admin-card">
+        <h3 class="admin-card-title">📢 Top Announcement Banner</h3>
+        <p class="admin-card-desc">Alert visitors to new feature drops, beta updates, or important announcements.</p>
+
+        <div class="form-group" style="margin-bottom: 16px; flex-direction: row; align-items: center; gap: 12px;">
+          <input type="checkbox" id="cfgBannerEnabled" style="width: 18px; height: 18px; accent-color: var(--accent-cyan);">
+          <label for="cfgBannerEnabled" class="form-label" style="margin: 0; cursor: pointer;">Enable Announcement Banner at top of page</label>
+        </div>
+
+        <div class="form-grid form-grid-2" style="margin-bottom: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="cfgBannerBadge">Badge Text</label>
+            <input type="text" id="cfgBannerBadge" class="form-control" placeholder="NEW UPDATE">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cfgBannerLink">CTA Link Text</label>
+            <input type="text" id="cfgBannerLink" class="form-control" placeholder="Download Installer (.exe) →">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cfgBannerText">Announcement Message</label>
+          <input type="text" id="cfgBannerText" class="form-control" placeholder="ApexCut v2.5 released: Native AV1 GPU encoding, AI Speech Enhancer & 10-bit HDR.">
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: System Requirements -->
+    <section id="tab-specs" class="admin-tab-content" style="display: none;">
+      <div class="admin-card">
+        <h3 class="admin-card-title">💻 Minimum System Requirements</h3>
+        <div class="form-grid form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="specMinOs">OS</label>
+            <input type="text" id="specMinOs" class="form-control" value="Windows 10 64-bit (v1903 or later)">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="specMinCpu">CPU</label>
+            <input type="text" id="specMinCpu" class="form-control" value="Intel Core i5-6th Gen / AMD Ryzen 5 1600">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="specMinGpu">GPU</label>
+            <input type="text" id="specMinGpu" class="form-control" value="NVIDIA GTX 960 (4GB) / AMD Radeon RX 560">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="specMinRam">RAM</label>
+            <input type="text" id="specMinRam" class="form-control" value="8 GB DDR4">
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h3 class="admin-card-title">🚀 Recommended System Requirements</h3>
+        <div class="form-grid form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="specRecOs">OS</label>
+            <input type="text" id="specRecOs" class="form-control" value="Windows 11 64-bit (Latest Build)">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="specRecCpu">CPU</label>
+            <input type="text" id="specRecCpu" class="form-control" value="Intel Core i7-12700K / AMD Ryzen 7 5800X+">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="specRecGpu">GPU</label>
+            <input type="text" id="specRecGpu" class="form-control" value="NVIDIA RTX 3060+ (8GB) / AMD RX 6700 XT">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="specRecRam">RAM</label>
+            <input type="text" id="specRecRam" class="form-control" value="16 GB – 32 GB DDR4/DDR5">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Team Collaboration -->
+    <section id="tab-team" class="admin-tab-content" style="display: none;">
+      <div class="admin-card">
+        <h3 class="admin-card-title">👥 Co-Owners &amp; Team Notes</h3>
+        <p class="admin-card-desc">
+          You and your friend can use this shared log to record changes, communicate build numbers, and leave updates for each other!
+        </p>
+
+        <div class="form-grid form-grid-2" style="margin-bottom: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="cfgOwner1">Owner 1 Name</label>
+            <input type="text" id="cfgOwner1" class="form-control" placeholder="e.g. Lead Developer">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cfgOwner2">Owner 2 (Friend's Name)</label>
+            <input type="text" id="cfgOwner2" class="form-control" placeholder="e.g. Co-Founder / Friend">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cfgTeamNotes">Shared Collaboration Log &amp; Notes</label>
+          <textarea id="cfgTeamNotes" class="form-control" rows="5" placeholder="Write internal notes, release checklist, or reminders for your friend here..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 5: Security & PIN -->
+    <section id="tab-security" class="admin-tab-content" style="display: none;">
+      <div class="admin-card">
+        <h3 class="admin-card-title">🔒 Change Admin Access PIN</h3>
+        <p class="admin-card-desc">Set a new 4-digit or 6-digit PIN for you and your friend.</p>
+
+        <div class="form-grid form-grid-2" style="max-width: 480px;">
+          <div class="form-group">
+            <label class="form-label" for="cfgNewPin">New PIN</label>
+            <input type="password" id="cfgNewPin" class="form-control" placeholder="New PIN (e.g. 5678)" maxlength="6">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cfgConfirmPin">Confirm PIN</label>
+            <input type="password" id="cfgConfirmPin" class="form-control" placeholder="Repeat PIN" maxlength="6">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Actions Bar -->
+    <div class="admin-actions-bar">
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button type="button" class="btn btn-cyan btn-lg" id="saveConfigBtn">
+          ✓ Save &amp; Apply Changes
+        </button>
+        <button type="button" class="btn btn-secondary btn-lg" id="exportConfigBtn" title="Download updated config.js file to commit to git or server">
+          📥 Export config.js
+        </button>
+      </div>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="resetConfigBtn" style="color: var(--accent-rose);">
+        ↺ Reset to Defaults
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="siteToast">
+    <span id="toastMessage">Saved successfully</span>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

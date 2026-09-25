@@ -1,0 +1,12 @@
+# Cloudflare Pages Redirects & Rewrites
+# https://developers.cloudflare.com/pages/platform/redirects/
+
+# Clean URL for Admin Control Panel
+/admin      /admin.html      200
+
+# Direct Shortcuts for Visitors & Marketing Links
+/download   /#download       302
+/latest     /downloads/ApexCut-Setup-v2.5.0.exe 302
+/specs      /#specs          302
+/features   /#features       302
+/guide      /#guide          302
